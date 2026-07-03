@@ -21,11 +21,28 @@ const __dirname = path.dirname(__filename);
 const SCRIPTS_DIR = path.join(__dirname, "scripts");
 const TEMP_DIR = path.join(__dirname, "temp");
 
-// Get the correct directory for AE bridge files
-// Use ~/Documents/ae-mcp-bridge for reliable cross-process access
+function getDocumentsDir(): string {
+  if (process.platform === 'win32') {
+    try {
+      const output = execSync(
+        'powershell.exe -NoProfile -Command "[Environment]::GetFolderPath(\'MyDocuments\')"',
+        { encoding: 'utf8' }
+      ).trim();
+      if (output) {
+        return output;
+      }
+    } catch {
+      // Fall back to the conventional profile Documents path below.
+    }
+  }
+
+  return path.join(os.homedir(), 'Documents');
+}
+
+// Get the correct directory for AE bridge files.
+// Match ExtendScript's Folder.myDocuments, which may be redirected to OneDrive.
 function getAETempDir(): string {
-  const homeDir = os.homedir();
-  const bridgeDir = path.join(homeDir, 'Documents', 'ae-mcp-bridge');
+  const bridgeDir = path.join(getDocumentsDir(), 'ae-mcp-bridge');
   // Ensure the directory exists
   if (!fs.existsSync(bridgeDir)) {
     fs.mkdirSync(bridgeDir, { recursive: true });

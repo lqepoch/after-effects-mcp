@@ -1,8 +1,8 @@
 {
   "mcpServers": {
     "AfterEffectsMCP": {
-      "command": "node",
-      "args": ["C:\\Users\\Daniel\\Downloads\\after-effects-mcp\\build\\index.js"]
+      "command": "C:\\Users\\67epo\\.cache\\codex-tools\\node-v24.18.0-win-x64\\node.exe",
+      "args": ["D:\\UE_Project\\after-effects-mcp\\build\\index.js"]
     }
   }
 }
